@@ -1,0 +1,17 @@
+GET http://localhost:8082/api/products/
+content-type: application/json
+
+###
+GET http://localhost:8082/api/products/1/
+content-type: application/json
+
+###
+POST http://localhost:8082/api/products/
+Content-Type: application/json
+
+{
+    "nom": "Dell i5",
+    "description": "7 ième génération",
+    "price": 900,
+    "stock": 5
+}
