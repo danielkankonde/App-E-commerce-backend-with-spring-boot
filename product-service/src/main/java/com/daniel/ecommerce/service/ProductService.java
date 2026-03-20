@@ -1,10 +1,14 @@
 package com.daniel.ecommerce.service;
 
+import com.daniel.ecommerce.dto.ProductDTO;
+import com.daniel.ecommerce.mapper.ProductMapper;
 import com.daniel.ecommerce.model.Product;
 import com.daniel.ecommerce.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -15,19 +19,26 @@ public class ProductService {
         this.produitRepository = produitRepository;
     }
     // fonction pour récuperer tous les produits
-    public List<Product> getAllProducts() {
-        return produitRepository.findAll();
+    public List<ProductDTO> getAllProducts() {
+        return produitRepository.findAll()
+                    .stream()
+                    .map(ProductMapper::toDTO)
+                    .collect(Collectors.toList());
     }
 
     // fonction pour ajouter un produit
-    public Product saveProduct(Product product) {
-        return produitRepository.save(product);
+    public ProductDTO saveProduct(ProductDTO productDto) {
+        Product product = ProductMapper.toEntity(productDto);
+        Product saved = produitRepository.save(product);
+        return ProductMapper.toDTO(saved);
     }
 
     // Fonction pour récuperer un produit spécifique
-    public Product detailProduct(Long id) {
-        return produitRepository.findById(id)
+    public ProductDTO detailProduct(Long id) {
+        Product product = produitRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Produit non trouvé "));
+        
+        return ProductMapper.toDTO(product);
     }
 
 }
